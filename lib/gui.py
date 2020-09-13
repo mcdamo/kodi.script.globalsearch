@@ -311,12 +311,15 @@ class GUI(xbmcgui.WindowXML):
             if self.focusset == 'false':
                 self.setContent(cat['content'])
                 self.addItems(listitems)
+                xbmc.sleep(50)
                 self.setFocusId(self.getCurrentContainerId())
                 self.focusset = 'true'
 
     def _update_list(self, item, content):
         self.clearList()
+        xbmc.sleep(2)
         self.setContent(content)
+        xbmc.sleep(2)
         self.addItems(self.content[item])
 
     def _get_info(self, labels, item):

@@ -141,3 +141,7 @@ msgstr ""
 msgctxt "#32299"
 msgid "New search"
 msgstr ""
+
+msgctxt "#32300"
+msgid "Unused"
+msgstr ""

@@ -16,6 +16,14 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
+msgctxt "Addon Summary"
+msgid "Search your library."
+msgstr "Căutați în mediateca dumneavoastră."
+
+msgctxt "Addon Description"
+msgid "This addon can find any item in your video and music library."
+msgstr "Acest supliment poate găsi orice element în mediateca dumneavoastră video și audio."
+
 msgctxt "#32000"
 msgid "General"
 msgstr "General"
@@ -41,20 +49,42 @@ msgid "Search Artists"
 msgstr "Căutare artiști"
 
 msgctxt "#32006"
-msgid "Search Abums"
+msgid "Search Albums"
 msgstr "Căutare albume"
 
 msgctxt "#32007"
 msgid "Search Songs"
 msgstr "Căutare cântece"
 
-msgctxt "#32008"
-msgid "Search Actors"
-msgstr "Căutare actori"
+# empty string with id 32008
+
+msgctxt "#32009"
+msgid "Search Live TV"
+msgstr ""
+
+# empty string with id 32010
+
+msgctxt "#32011"
+msgid "Search Movie Actors"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Search Movie Directors"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Search TV Show Actors"
+msgstr ""
+
+# empty strings from id 32012 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"
 msgstr "Introduceți șir de căutare"
+
+msgctxt "#32102"
+msgid "Items"
+msgstr ""
 
 msgctxt "#32203"
 msgid "Browse album"
@@ -88,6 +118,34 @@ msgctxt "#32210"
 msgid "Find all songs"
 msgstr "Găsește toate cântecele"
 
+msgctxt "#32211"
+msgid "Movies starring"
+msgstr ""
+
+msgctxt "#32212"
+msgid "Resume from %s"
+msgstr ""
+
+# empty strings from id 32213 to 32220
+
+msgctxt "#32221"
+msgid "Movie Actors"
+msgstr ""
+
+msgctxt "#32222"
+msgid "TV Show Actors"
+msgstr ""
+
+# empty strings from id 32223 to 32296
+
+msgctxt "#32297"
+msgid "Searching:"
+msgstr ""
+
+msgctxt "#32298"
+msgid "Search again?"
+msgstr ""
+
 msgctxt "#32299"
-msgid "NEW SEARCH"
+msgid "New search"
 msgstr "CĂUTARE NOUĂ"

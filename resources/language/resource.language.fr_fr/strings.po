@@ -16,6 +16,14 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "Addon Summary"
+msgid "Search your library."
+msgstr "Chercher dans la médiathèque."
+
+msgctxt "Addon Description"
+msgid "This addon can find any item in your video and music library."
+msgstr "Cette extension peut trouver tout élément dans la vidéothèque et l'audiothèque."
+
 msgctxt "#32000"
 msgid "General"
 msgstr "Général"
@@ -41,24 +49,34 @@ msgid "Search Artists"
 msgstr "Recherche des artistes"
 
 msgctxt "#32006"
-msgid "Search Abums"
+msgid "Search Albums"
 msgstr "Recherche des albums"
 
 msgctxt "#32007"
 msgid "Search Songs"
 msgstr "Recherche des chansons"
 
-msgctxt "#32008"
-msgid "Search Actors"
-msgstr "Rechercher des acteurs"
+# empty string with id 32008
 
 msgctxt "#32009"
-msgid "Search EPG"
+msgid "Search Live TV"
 msgstr "Recherches des EPGs"
 
-msgctxt "#32010"
-msgid "Search Directors"
-msgstr "Rechercher les réalisateurs"
+# empty string with id 32010
+
+msgctxt "#32011"
+msgid "Search Movie Actors"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Search Movie Directors"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Search TV Show Actors"
+msgstr ""
+
+# empty strings from id 32012 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"
@@ -104,10 +122,30 @@ msgctxt "#32211"
 msgid "Movies starring"
 msgstr "Films avec"
 
+msgctxt "#32212"
+msgid "Resume from %s"
+msgstr ""
+
+# empty strings from id 32213 to 32220
+
+msgctxt "#32221"
+msgid "Movie Actors"
+msgstr ""
+
+msgctxt "#32222"
+msgid "TV Show Actors"
+msgstr ""
+
+# empty strings from id 32223 to 32296
+
+msgctxt "#32297"
+msgid "Searching:"
+msgstr ""
+
 msgctxt "#32298"
 msgid "Search again?"
 msgstr "Effectuer une nouvelle recherche ?"
 
 msgctxt "#32299"
-msgid "NEW SEARCH"
+msgid "New search"
 msgstr "NOUVELLE RECHERCHE"

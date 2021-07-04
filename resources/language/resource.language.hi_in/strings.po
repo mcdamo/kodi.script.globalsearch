@@ -5,15 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"Report-Msgid-Bugs-To: ronie@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
 "Language-Team: Hindi (Devanagiri) (http://www.transifex.com/projects/p/xbmc-addons/language/hi/)\n"
+"Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "Addon Summary"
@@ -57,13 +57,11 @@ msgid "Search Songs"
 msgstr ""
 
 # empty string with id 32008
-
 msgctxt "#32009"
 msgid "Search Live TV"
 msgstr ""
 
 # empty string with id 32010
-
 msgctxt "#32011"
 msgid "Search Movie Actors"
 msgstr ""
@@ -77,7 +75,6 @@ msgid "Search TV Show Actors"
 msgstr ""
 
 # empty strings from id 32012 to 32100
-
 msgctxt "#32101"
 msgid "Enter search string"
 msgstr ""
@@ -127,7 +124,6 @@ msgid "Resume from %s"
 msgstr ""
 
 # empty strings from id 32213 to 32220
-
 msgctxt "#32221"
 msgid "Movie Actors"
 msgstr ""
@@ -137,7 +133,6 @@ msgid "TV Show Actors"
 msgstr ""
 
 # empty strings from id 32223 to 32296
-
 msgctxt "#32297"
 msgid "Searching:"
 msgstr ""

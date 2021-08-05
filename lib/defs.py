@@ -80,8 +80,23 @@ CATEGORIES = {
                           'content':'episodes',
                           'method':'VideoLibrary.GetEpisodes',
                           'properties':EPISODELABELS,
-                          'sort':'title',
+                          'sort':'title', # FIXME order by tvshow
                           'rule':'"filter":{{"field":"title", "operator":"contains", "value":"{query}"}}',
+                          'streamdetails':True,
+                          'label':20360,
+                          'icon':'DefaultVideo.png',
+                          'menuthumb':'globalsearch-icon-episodes.png',
+                          'media':'video'
+                         },
+              'episodesplot':{
+                          'order':21,
+                          'enabled':False,
+                          'type':'episodesplot',
+                          'content':'episodes',
+                          'method':'VideoLibrary.GetEpisodes',
+                          'properties':EPISODELABELS,
+                          'sort':'title', # FIXME order by tvshow
+                          'rule':'"filter":{{"field":"plot", "operator":"contains", "value":"{query}"}}',
                           'streamdetails':True,
                           'label':20360,
                           'icon':'DefaultVideo.png',

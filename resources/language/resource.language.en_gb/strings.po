@@ -76,7 +76,11 @@ msgctxt "#32013"
 msgid "Search TV Show Actors"
 msgstr ""
 
-# empty strings from id 32012 to 32100
+msgctxt "#32014"
+msgid "Search Episodes Plot"
+msgstr ""
+
+# empty strings from id 32015 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"

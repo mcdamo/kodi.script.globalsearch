@@ -52,6 +52,7 @@ CATEGORIES = {
                         'properties':MOVIELABELS,
                         'sort':'title',
                         'rule':'"filter":{{"or":[{{"field":"title", "operator":"contains", "value":"{query}"}}, {{"field":"originaltitle", "operator":"contains", "value":"{query}"}}]}}',
+                        'ruleplot':'"filter":{{"or":[{{"field":"title", "operator":"contains", "value":"{query}"}}, {{"field":"originaltitle", "operator":"contains", "value":"{query}"}}, {{"field":"plot", "operator":"contains", "value":"{query}"}}]}}',
                         'streamdetails':True,
                         'label':342,
                         'icon':'DefaultVideo.png',

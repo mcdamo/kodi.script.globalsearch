@@ -109,7 +109,7 @@ class GUI(xbmcgui.WindowXML):
         if cat['type'] == 'seasonepisodes':
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
-        elif cat['type'] == 'episodes' and ADDON.getSettingBool('episodesplot'):
+        elif (cat['type'] == 'episodes' and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
             rule = cat['ruleplot'].format(query = search)
         else:
             rule = cat['rule'].format(query = search)

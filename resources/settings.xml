@@ -8,6 +8,14 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting help="" id="moviesplot" label="32015" type="boolean">
+					<dependencies>
+						<dependency type="enable" setting="movies">true</dependency>
+					</dependencies>
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting help="" id="actors" label="32011" type="boolean">
 					<level>0</level>
 					<default>false</default>

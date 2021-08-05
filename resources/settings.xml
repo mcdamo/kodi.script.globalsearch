@@ -29,6 +29,9 @@
 					<control type="toggle"/>
 				</setting>
 				<setting help="" id="episodesplot" label="32014" type="boolean">
+					<dependencies>
+						<dependency type="enable" setting="episodes">true</dependency>
+					</dependencies>
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>

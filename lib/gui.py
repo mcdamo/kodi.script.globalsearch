@@ -49,7 +49,7 @@ class GUI(xbmcgui.WindowXML):
 
     def _load_settings(self):
         for key, value in CATEGORIES.items():
-            if key not in ('albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes', 'actormovies', 'directormovies', 'actortvshows'):
+            if key not in ('albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes', 'episodesplot', 'actormovies', 'directormovies', 'actortvshows'):
                 CATEGORIES[key]['enabled'] = ADDON.getSettingBool(key)
 
     def _get_preferences(self):
@@ -109,6 +109,8 @@ class GUI(xbmcgui.WindowXML):
         if cat['type'] == 'seasonepisodes':
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
+        elif (cat['type'] == 'episodes' and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
+            rule = cat['ruleplot'].format(query = search)
         else:
             rule = cat['rule'].format(query = search)
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))

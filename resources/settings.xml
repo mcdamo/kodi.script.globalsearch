@@ -8,6 +8,14 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting help="" id="moviesplot" label="32015" type="boolean">
+					<dependencies>
+						<dependency type="enable" setting="movies">true</dependency>
+					</dependencies>
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting help="" id="actors" label="32011" type="boolean">
 					<level>0</level>
 					<default>false</default>
@@ -26,6 +34,14 @@
 				<setting help="" id="episodes" label="32003" type="boolean">
 					<level>0</level>
 					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="episodesplot" label="32014" type="boolean">
+					<dependencies>
+						<dependency type="enable" setting="episodes">true</dependency>
+					</dependencies>
+					<level>0</level>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting help="" id="tvactors" label="32013" type="boolean">

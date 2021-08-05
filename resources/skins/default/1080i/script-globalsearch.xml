@@ -1205,11 +1205,29 @@
 						<aspectratio>keep</aspectratio>
 						<visible>![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
+					<control type="group">
+						<control type="image">
+							<left>100</left>
+							<top>30</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>globalsearch-list-watched.png</texture>
+							<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+						</control>
+						<control type="image">
+							<left>100</left>
+							<top>30</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>globalsearch-list-unwatched.png</texture>
+							<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+						</control>
+					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>5</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font14</font>
 						<label>[B]$INFO[ListItem.Label][/B]</label>
@@ -1217,10 +1235,10 @@
 						<visible>!Container.Content(songs)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>5</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font14</font>
 						<label>[B]$INFO[ListItem.TrackNumber,,. ]$INFO[ListItem.Label][/B]</label>
@@ -1228,10 +1246,10 @@
 						<visible>Container.Content(songs)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Genre]</label>
@@ -1239,10 +1257,10 @@
 						<visible>Container.Content(movies) | Container.Content(tvshows) | Container.Content(artists)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.TVShowTitle]</label>
@@ -1250,10 +1268,10 @@
 						<visible>Container.Content(seasons) | Container.Content(episodes)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Property(artist_genre)]</label>
@@ -1261,10 +1279,10 @@
 						<visible>Container.Content(artists)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Artist]</label>
@@ -1272,10 +1290,10 @@
 						<visible>Container.Content(musicvideos) | Container.Content(albums) | Container.Content(songs)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Property(Starttime)]</label>
@@ -1283,10 +1301,10 @@
 						<visible>Container.Content(livetv)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Label2]</label>
@@ -1321,11 +1339,29 @@
 						<aspectratio>keep</aspectratio>
 						<visible>![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
+					<control type="group">
+						<control type="image">
+							<left>100</left>
+							<top>30</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>globalsearch-list-watched.png</texture>
+							<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+						</control>
+						<control type="image">
+							<left>100</left>
+							<top>30</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>globalsearch-list-unwatched.png</texture>
+							<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+						</control>
+					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>5</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font14</font>
 						<label>[B]$INFO[ListItem.Label][/B]</label>
@@ -1333,10 +1369,10 @@
 						<visible>!Container.Content(songs)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>5</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font14</font>
 						<label>[B]$INFO[ListItem.TrackNumber,,. ]$INFO[ListItem.Label][/B]</label>
@@ -1344,10 +1380,10 @@
 						<visible>Container.Content(songs)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Genre]</label>
@@ -1355,10 +1391,10 @@
 						<visible>Container.Content(movies) | Container.Content(tvshows)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.TVShowTitle]</label>
@@ -1366,10 +1402,10 @@
 						<visible>Container.Content(seasons) | Container.Content(episodes)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Property(artist_genre)]</label>
@@ -1377,10 +1413,10 @@
 						<visible>Container.Content(artists)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Artist]</label>
@@ -1388,10 +1424,10 @@
 						<visible>Container.Content(musicvideos) | Container.Content(albums) | Container.Content(songs)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Property(Starttime)]</label>
@@ -1399,10 +1435,10 @@
 						<visible>Container.Content(livetv)</visible>
 					</control>
 					<control type="label">
-						<left>110</left>
+						<left>160</left>
 						<top>45</top>
 						<height>50</height>
-						<width>928</width>
+						<width>878</width>
 						<aligny>center</aligny>
 						<font>font27</font>
 						<label>$INFO[ListItem.Label2]</label>

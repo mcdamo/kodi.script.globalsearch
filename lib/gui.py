@@ -20,6 +20,7 @@ class GUI(xbmcgui.WindowXML):
         self.navback = False
         self.history = {}
         self.menuposition = 0
+        self.unwatched = False
         self.searchstring = self._clean_string(self.searchstring).strip()
         if self.searchstring == '':
             self._close()
@@ -113,6 +114,9 @@ class GUI(xbmcgui.WindowXML):
             rule = cat['ruleplot'].format(query = search)
         else:
             rule = cat['rule'].format(query = search)
+        if (self.unwatched and (cat['type'] == 'episodes' or cat['type'] == 'movies')):
+            rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
+            log("Unwatched filter: {}".format(rule))
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))
         self.getControl(SEARCHCATEGORY).setVisible(True)
         json_query = xbmc.executeJSONRPC('{"jsonrpc":"2.0", "method":"%s", "params":{"properties":%s, "sort":{"method":"%s"}, %s}, "id": 1}' % (cat['method'], json.dumps(cat['properties']), cat['sort'], rule))
@@ -632,6 +636,21 @@ class GUI(xbmcgui.WindowXML):
             self.clearList()
             self.onInit()
 
+    def _toggle_unwatched(self):
+        self.unwatched = not self.unwatched
+        log("Toggle unwatched {}".format(self.unwatched))
+        labelid = 16101 if self.unwatched else 16100 # "Unwatched" / "All videos"
+        self.getControl(TOGGLE_UNWATCHED).setLabel(xbmc.getLocalizedString(labelid))
+        self._reset_variables()
+        self._hide_controls()
+        self.clearList()
+        self.menu.reset()
+        self.oldfocus = 0
+        cats = self.history[self.level]['cats']
+        search = self.history[self.level]['search']
+        for cat in cats:
+            self._get_items(cat, search)
+
     def onClick(self, controlId):
         if controlId == self.getCurrentContainerId():
             self.containerposition = self.getCurrentListPosition()
@@ -684,6 +703,8 @@ class GUI(xbmcgui.WindowXML):
             self._update_list(item, content)
         elif controlId == SEARCHBUTTON:
             self._new_search()
+        elif controlId == TOGGLE_UNWATCHED:
+            self._toggle_unwatched()
 
     def onAction(self, action):
         if action.getId() in ACTION_CANCEL_DIALOG:

@@ -17,6 +17,7 @@ SEARCHBUTTON = 990
 SEARCHCATEGORY = 991
 NORESULTS = 999
 MENU = 9000
+TOGGLE_UNWATCHED = 14
 
 MOVIELABELS = ["genre", "country", "year", "top250", "setid", "rating", "userrating", "playcount", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle",
                "runtime", "studio", "tagline", "writer", "premiered", "set", "imdbnumber", "lastplayed", "votes", "trailer", "dateadded", "streamdetails", "art", "file", "resume"]

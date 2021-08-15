@@ -642,14 +642,12 @@ class GUI(xbmcgui.WindowXML):
         labelid = 16101 if self.unwatched else 16100 # "Unwatched" / "All videos"
         self.getControl(TOGGLE_UNWATCHED).setLabel(xbmc.getLocalizedString(labelid))
         self._reset_variables()
+        self._init_items()
         self._hide_controls()
         self.clearList()
         self.menu.reset()
         self.oldfocus = 0
-        cats = self.history[self.level]['cats']
-        search = self.history[self.level]['search']
-        for cat in cats:
-            self._get_items(cat, search)
+        self._fetch_items()
 
     def onClick(self, controlId):
         if controlId == self.getCurrentContainerId():

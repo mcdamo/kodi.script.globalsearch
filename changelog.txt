@@ -1,3 +1,6 @@
+v9.1.1
+- fix toggle unwatch action
+
 v9.1.0
 - add support for searching episodes and movies by plot
 - add watched icons in list view

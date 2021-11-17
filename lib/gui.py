@@ -110,11 +110,18 @@ class GUI(xbmcgui.WindowXML):
         if cat['type'] == 'seasonepisodes':
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
-        elif (cat['type'] == 'episodes' and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
-            rule = cat['ruleplot'].format(query = search)
+        elif cat['type'] in ['movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors', 'actormovies', 'directormovies', 'actortvshows']:
+            filters = [cat['filters']['default'].format(query = search)]
+            if (ADDON.getSettingBool('paths') and 'path' in cat['filters']):
+                filters.append(cat['filters']['path'].format(query = search))
+            if (ADDON.getSettingBool('filenames') and 'filename' in cat['filters']):
+                filters.append(cat['filters']['filename'].format(query = search))
+            if ((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
+                filters.append(cat['filters']['plot'].format(query = search))
+            rule = cat['rule'].format(filters = ','.join(filters))
         else:
             rule = cat['rule'].format(query = search)
-        if (self.hidewatched and (cat['type'] == 'episodes' or cat['type'] == 'movies')):
+        if (self.hidewatched and cat['type'] in ['episodes', 'movies', 'tvshows']):
             rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
             log("HideWatched filter: {}".format(rule))
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))

@@ -77,18 +77,26 @@ msgid "Search TV Show Actors"
 msgstr ""
 
 msgctxt "#32014"
-msgid "Search Episodes Plot"
+msgid "Include Plot in Episodes Search"
 msgstr ""
 
 msgctxt "#32015"
-msgid "Search Movies Plot"
+msgid "Include Plot in Movies Search"
 msgstr ""
 
 msgctxt "#32016"
 msgid "Hide Watched"
 msgstr ""
 
-# empty strings from id 32017 to 32100
+msgctxt "#32017"
+msgid "Include Paths in Search"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Include Filenames in Search"
+msgstr ""
+
+# empty strings from id 32019 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"

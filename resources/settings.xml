@@ -85,6 +85,16 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting help="" id="paths" label="32017" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="filenames" label="32018" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 			</group>
 		</category>
 	</section>

@@ -1,6 +1,7 @@
 import datetime
 import json
 import operator
+import re
 from .defs import *
 
 def log(txt):
@@ -52,6 +53,7 @@ class GUI(xbmcgui.WindowXML):
             if key not in ('albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes', 'episodesplot', 'actormovies', 'directormovies', 'actortvshows'):
                 CATEGORIES[key]['enabled'] = ADDON.getSettingBool(key)
         self.hidewatched = ADDON.getSettingBool('hidewatched')
+        self._set_hidewatched_label()
 
     def _get_preferences(self):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params":{"setting":"myvideos.selectaction"}, "id": 1}')
@@ -111,14 +113,29 @@ class GUI(xbmcgui.WindowXML):
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
         elif cat['type'] in ['movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors', 'actormovies', 'directormovies', 'actortvshows']:
-            filters = [cat['filters']['default'].format(query = search)]
-            if (ADDON.getSettingBool('paths') and 'path' in cat['filters']):
-                filters.append(cat['filters']['path'].format(query = search))
-            if (ADDON.getSettingBool('filenames') and 'filename' in cat['filters']):
-                filters.append(cat['filters']['filename'].format(query = search))
-            if ((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
-                filters.append(cat['filters']['plot'].format(query = search))
-            rule = cat['rule'].format(filters = ','.join(filters))
+            (required_rules, keywords) = self._parse_search(cat['filters'], search)
+            keywords_rule = ''
+            if keywords:
+                filters = []
+                filter = self._keyword_filters(cat['filters']['default'], keywords)
+                filters.append(filter)
+                if (ADDON.getSettingBool('paths') and 'path' in cat['filters']):
+                    filter = self._keyword_filters(cat['filters']['path'], keywords)
+                    filters.append(filter)
+                if (ADDON.getSettingBool('filenames') and 'filename' in cat['filters']):
+                    filter = self._keyword_filters(cat['filters']['filename'], keywords)
+                    filters.append(filter)
+                if ((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
+                    filter = self._keyword_filters(cat['filters']['plot'], keywords)
+                    filters.append(filter)
+                keywords_rule = '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
+            if required_rules:
+                if keywords_rule:
+                    required_rules.append(keywords_rule)
+                final_rule = '{{"and":[{filters}]}}'.format(filters = ','.join(required_rules))
+            else:
+                final_rule = keywords_rule
+            rule = cat['rule'].format(query = final_rule)
         else:
             rule = cat['rule'].format(query = search)
         if (self.hidewatched and cat['type'] in ['episodes', 'movies', 'tvshows']):
@@ -254,6 +271,46 @@ class GUI(xbmcgui.WindowXML):
                 self.setFocusId(self.getCurrentContainerId())
                 self.menutype = cat['type']
                 self.focusset = 'true'
+
+    def _parse_search(self, filters, search):
+        """Parse search string for named parameters and phrases
+
+        Words separated by spaces are treated as keywords
+
+        Phrases are wrapped in double quotes
+        eg: "Doctor Who"
+
+        Named parameters are any of path, filename, title, or plot:
+        eg: path:tvshows
+            title:"Doctor Who"
+
+        Named parameters are mandatory in the search results and all keywords must match.
+        """
+        matches = re.findall(r'(((path|filename|title|plot):)?([^\s"]+|"([^"]+)"))', search)
+        keywords = []
+        required = []
+        for match in matches:
+            # match[4] is phrase inside quotes, match[3] is any keyword
+            # eg. 'Doctor Who' or '"Doctor Who"'
+            keyword = match[4] or match[3]
+            if match[2]:
+                # match is a named parameter
+                if match[2] in filters:
+                    required.append(filters[match[2]].format(query = keyword))
+                else:
+                    # recognised param is not valid for this media type, so ignore
+                    pass
+            else:
+                keywords.append(keyword)
+        return (required, keywords)
+
+    def _keyword_filters(self, filter, keywords):
+        """Wrap filters in 'and' if there a multiple keywords"""
+        filters = list(map(lambda x: filter.format(query = x), keywords))
+        if len(filters) == 1:
+            return filters[0]
+        rule = '{{"and":[{filters}]}}'.format(filters = ','.join(filters))
+        return rule
 
     def _fetch_channelgroups(self, cat):
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(19069))
@@ -643,11 +700,14 @@ class GUI(xbmcgui.WindowXML):
             self.clearList()
             self.onInit()
 
+    def _set_hidewatched_label(self):
+        labelid = 16101 if self.hidewatched else 16100 # "Unwatched" / "All videos"
+        self.getControl(TOGGLE_HIDEWATCHED).setLabel(xbmc.getLocalizedString(labelid))
+
     def _toggle_hidewatched(self):
         self.hidewatched = not self.hidewatched
         log("Toggle hidewatched {}".format(self.hidewatched))
-        labelid = 16101 if self.hidewatched else 16100 # "Unwatched" / "All videos"
-        self.getControl(TOGGLE_HIDEWATCHED).setLabel(xbmc.getLocalizedString(labelid))
+        self._set_hidewatched_label()
         self._reset_variables()
         self._init_items()
         self._hide_controls()

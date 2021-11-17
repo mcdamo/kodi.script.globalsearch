@@ -52,9 +52,10 @@ CATEGORIES = {
             'method':'VideoLibrary.GetMovies',
             'properties':MOVIELABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"title", "operator":"contains", "value":"{query}"}},{{"field":"originaltitle", "operator":"contains", "value":"{query}"}}',
+                  'title':'{{"field":"title", "operator":"contains", "value":"{query}"}}',
                   'plot':'{{"field":"plot", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
                   'filename':'{{"field":"filename", "operator":"contains", "value":"{query}"}}',
@@ -73,9 +74,10 @@ CATEGORIES = {
             'method':'VideoLibrary.GetTVShows',
             'properties':TVSHOWLABELS,
             'sort':'label',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"title", "operator":"contains", "value":"{query}"}}',
+                  'title':'{{"field":"title", "operator":"contains", "value":"{query}"}}',
                   'plot':'{{"field":"plot", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
             },
@@ -93,9 +95,10 @@ CATEGORIES = {
             'method':'VideoLibrary.GetEpisodes',
             'properties':EPISODELABELS,
             'sort':'tvshowtitle',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"title", "operator":"contains", "value":"{query}"}}',
+                  'title':'{{"field":"title", "operator":"contains", "value":"{query}"}}',
                   'plot':'{{"field":"plot", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
                   'filename':'{{"field":"filename", "operator":"contains", "value":"{query}"}}',
@@ -114,7 +117,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetMusicVideos',
             'properties':MUSICVIDEOLABELS,
             'sort':'label',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"title", "operator":"contains", "value":"{query}"}}, {{"field":"artist", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
@@ -134,7 +137,7 @@ CATEGORIES = {
             'method':'AudioLibrary.GetArtists',
             'properties':ARTISTLABELS,
             'sort':'label',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"artist", "operator":"contains", "value":"{query}"}}',
             },
@@ -152,7 +155,7 @@ CATEGORIES = {
             'method':'AudioLibrary.GetAlbums',
             'properties':ALBUMLABELS,
             'sort':'label',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"album", "operator":"contains", "value":"{query}"}},{{"field":"originaltitle", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
@@ -171,7 +174,7 @@ CATEGORIES = {
             'method':'AudioLibrary.GetSongs',
             'properties':SONGLABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"title", "operator":"contains", "value":"{query}"}}, {{"field":"artist", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
@@ -199,7 +202,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetMovies',
             'properties':ACTORLABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"actor", "operator":"contains", "value":"{query}"}}',
             },
@@ -217,7 +220,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetMovies',
             'properties':DIRECTORLABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"director", "operator":"contains", "value":"{query}"}}',
             },
@@ -235,7 +238,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetTVShows',
             'properties':ACTORLABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"actor", "operator":"contains", "value":"{query}"}}',
             },
@@ -253,7 +256,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetMovies',
             'properties':MOVIELABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"actor", "operator":"contains", "value":"{query}"}}',
             },
@@ -271,7 +274,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetMovies',
             'properties':MOVIELABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"director", "operator":"contains", "value":"{query}"}}',
             },
@@ -289,7 +292,7 @@ CATEGORIES = {
             'method':'VideoLibrary.GetTVShows',
             'properties':TVSHOWLABELS,
             'sort':'title',
-            'rule':'"filter":{{"or":[{filters}]}}',
+            'rule':'"filter":{query}',
             'filters':{
                   'default':'{{"field":"actor", "operator":"contains", "value":"{query}"}}',
             },

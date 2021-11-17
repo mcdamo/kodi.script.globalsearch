@@ -84,7 +84,11 @@ msgctxt "#32015"
 msgid "Search Movies Plot"
 msgstr ""
 
-# empty strings from id 32016 to 32100
+msgctxt "#32016"
+msgid "Hide Watched"
+msgstr ""
+
+# empty strings from id 32017 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"

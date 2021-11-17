@@ -80,6 +80,11 @@
 					<visible>false</visible>
 					<control type="edit" format="integer" />
 				</setting>
+				<setting help="" id="hidewatched" label="32016" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 			</group>
 		</category>
 	</section>

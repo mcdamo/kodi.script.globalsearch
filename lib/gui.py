@@ -20,7 +20,6 @@ class GUI(xbmcgui.WindowXML):
         self.navback = False
         self.history = {}
         self.menuposition = 0
-        self.unwatched = False
         self.searchstring = self._clean_string(self.searchstring).strip()
         if self.searchstring == '':
             self._close()
@@ -52,6 +51,7 @@ class GUI(xbmcgui.WindowXML):
         for key, value in CATEGORIES.items():
             if key not in ('albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes', 'episodesplot', 'actormovies', 'directormovies', 'actortvshows'):
                 CATEGORIES[key]['enabled'] = ADDON.getSettingBool(key)
+        self.hidewatched = ADDON.getSettingBool('hidewatched')
 
     def _get_preferences(self):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params":{"setting":"myvideos.selectaction"}, "id": 1}')
@@ -114,9 +114,9 @@ class GUI(xbmcgui.WindowXML):
             rule = cat['ruleplot'].format(query = search)
         else:
             rule = cat['rule'].format(query = search)
-        if (self.unwatched and (cat['type'] == 'episodes' or cat['type'] == 'movies')):
+        if (self.hidewatched and (cat['type'] == 'episodes' or cat['type'] == 'movies')):
             rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
-            log("Unwatched filter: {}".format(rule))
+            log("HideWatched filter: {}".format(rule))
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))
         self.getControl(SEARCHCATEGORY).setVisible(True)
         json_query = xbmc.executeJSONRPC('{"jsonrpc":"2.0", "method":"%s", "params":{"properties":%s, "sort":{"method":"%s"}, %s}, "id": 1}' % (cat['method'], json.dumps(cat['properties']), cat['sort'], rule))
@@ -636,11 +636,11 @@ class GUI(xbmcgui.WindowXML):
             self.clearList()
             self.onInit()
 
-    def _toggle_unwatched(self):
-        self.unwatched = not self.unwatched
-        log("Toggle unwatched {}".format(self.unwatched))
-        labelid = 16101 if self.unwatched else 16100 # "Unwatched" / "All videos"
-        self.getControl(TOGGLE_UNWATCHED).setLabel(xbmc.getLocalizedString(labelid))
+    def _toggle_hidewatched(self):
+        self.hidewatched = not self.hidewatched
+        log("Toggle hidewatched {}".format(self.hidewatched))
+        labelid = 16101 if self.hidewatched else 16100 # "Unwatched" / "All videos"
+        self.getControl(TOGGLE_HIDEWATCHED).setLabel(xbmc.getLocalizedString(labelid))
         self._reset_variables()
         self._init_items()
         self._hide_controls()
@@ -701,8 +701,8 @@ class GUI(xbmcgui.WindowXML):
             self._update_list(item, content)
         elif controlId == SEARCHBUTTON:
             self._new_search()
-        elif controlId == TOGGLE_UNWATCHED:
-            self._toggle_unwatched()
+        elif controlId == TOGGLE_HIDEWATCHED:
+            self._toggle_hidewatched()
 
     def onAction(self, action):
         if action.getId() in ACTION_CANCEL_DIALOG:

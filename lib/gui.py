@@ -233,7 +233,7 @@ class GUI(xbmcgui.WindowXML):
                     listitems.append(listitem)
         if len(listitems) > 0:
             # exclude top '..' item from nested items count
-            listlen = len(listitems) - 1 if cat['type'] in ['albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes'] else len(listitems)
+            listlen = len(listitems) - 1 if listitems[0].getLabel() == '..' else len(listitems)
             if cat['type'] != 'actors' and cat['type'] != 'tvactors':
                 menuitem = xbmcgui.ListItem(xbmc.getLocalizedString(cat['label']), str(listlen), offscreen=True)
             else:

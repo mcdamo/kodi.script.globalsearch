@@ -128,7 +128,7 @@ class GUI(xbmcgui.WindowXML):
                 if ('plot' in cat['filters'] and (((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
                     filter = self._keyword_filters(cat['filters']['plot'], keywords)
                     filters.append(filter)
-                keywords_rule = '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
+                keywords_rule = filters[0] if len(filters) == 1 else '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
             if required_rules:
                 if keywords_rule:
                     required_rules.append(keywords_rule)
@@ -736,6 +736,7 @@ class GUI(xbmcgui.WindowXML):
             if listitem.getLabel() == '..':
                 self.level -= 1
                 self._nav_back()
+                return
             if listitem.getVideoInfoTag().getMediaType():
                 media = listitem.getVideoInfoTag().getMediaType()
             elif listitem.getMusicInfoTag().getMediaType():

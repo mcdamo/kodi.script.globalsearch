@@ -157,7 +157,7 @@ CATEGORIES = {
             'sort':'label',
             'rule':'"filter":{query}',
             'filters':{
-                  'default':'{{"field":"album", "operator":"contains", "value":"{query}"}},{{"field":"originaltitle", "operator":"contains", "value":"{query}"}}',
+                  'default':'{{"field":"album", "operator":"contains", "value":"{query}"}}',
                   'path':'{{"field":"path", "operator":"contains", "value":"{query}"}}',
             },
             'streamdetails':False,

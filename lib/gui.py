@@ -204,6 +204,9 @@ class GUI(xbmcgui.WindowXML):
                     listitem.setProperty('WatchedEpisodes', str(item['watchedepisodes']))
                     listitem.setProperty('UnWatchedEpisodes', str(item['episode'] - item['watchedepisodes']))
                 elif cat['content'] == 'seasons':
+                    if (self.hidewatched and item['playcount'] == 1):
+                        # filter watched seasons, this is not possible in the query
+                        continue
                     listitem.setProperty('tvshowid', str(item['tvshowid']))
                 elif (cat['content'] == 'movies' and cat['type'] not in ('actors', 'directors')) or cat['content'] == 'episodes' or cat['content'] == 'musicvideos':
                     listitem.setProperty('resume', str(int(item['resume']['position'])))

@@ -112,20 +112,20 @@ class GUI(xbmcgui.WindowXML):
         if cat['type'] == 'seasonepisodes':
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
-        elif cat['type'] in ['movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors', 'actormovies', 'directormovies', 'actortvshows']:
+        elif cat['type'] in ['movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors']:
             (required_rules, keywords) = self._parse_search(cat['filters'], search)
             keywords_rule = ''
             if keywords:
                 filters = []
                 filter = self._keyword_filters(cat['filters']['default'], keywords)
                 filters.append(filter)
-                if (ADDON.getSettingBool('paths') and 'path' in cat['filters']):
+                if ('path' in cat['filters'] and ADDON.getSettingBool('paths')):
                     filter = self._keyword_filters(cat['filters']['path'], keywords)
                     filters.append(filter)
-                if (ADDON.getSettingBool('filenames') and 'filename' in cat['filters']):
+                if ('filename' in cat['filters'] and ADDON.getSettingBool('filenames')):
                     filter = self._keyword_filters(cat['filters']['filename'], keywords)
                     filters.append(filter)
-                if ((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')):
+                if ('plot' in cat['filters'] and (((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
                     filter = self._keyword_filters(cat['filters']['plot'], keywords)
                     filters.append(filter)
                 keywords_rule = '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
@@ -139,6 +139,7 @@ class GUI(xbmcgui.WindowXML):
         else:
             rule = cat['rule'].format(query = search)
         if (self.hidewatched and cat['type'] in ['episodes', 'movies', 'tvshows']):
+            # FIXME: hidewatched tvshowseasons and seasonepisodes?
             rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
             log("HideWatched filter: {}".format(rule))
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))
@@ -232,10 +233,12 @@ class GUI(xbmcgui.WindowXML):
                     listitem.setProperty('content', cat['type'])
                     listitems.append(listitem)
         if len(listitems) > 0:
-            if cat['type'] != 'actors' and cat['type'] != 'tvactors': 
-                menuitem = xbmcgui.ListItem(xbmc.getLocalizedString(cat['label']), str(len(listitems)), offscreen=True)
+            # exclude top '..' item from nested items count
+            listlen = len(listitems) - 1 if cat['type'] in ['albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes'] else len(listitems)
+            if cat['type'] != 'actors' and cat['type'] != 'tvactors':
+                menuitem = xbmcgui.ListItem(xbmc.getLocalizedString(cat['label']), str(listlen), offscreen=True)
             else:
-                menuitem = xbmcgui.ListItem(LANGUAGE(cat['label']), str(len(listitems)), offscreen=True)
+                menuitem = xbmcgui.ListItem(LANGUAGE(cat['label']), str(listlen), offscreen=True)
             menuitem.setArt({'icon':cat['menuthumb']})
             menuitem.setProperty('type', cat['type'])
             if cat['type'] != 'actors' and cat['type'] != 'directors' and cat['type'] != 'tvactors':
@@ -493,7 +496,7 @@ class GUI(xbmcgui.WindowXML):
         elif key == 'albumsongs':
             search = listitem.getMusicInfoTag().getDbId()
         elif key == 'actormovies' or key == 'directormovies' or key == 'actortvshows':
-            search = listitem.getLabel()
+            search = '"' + listitem.getLabel() + '"'
         self._reset_variables()
         self._hide_controls()
         self.clearList()

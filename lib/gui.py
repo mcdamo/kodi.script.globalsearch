@@ -41,7 +41,7 @@ class GUI(xbmcgui.WindowXML):
             self._fetch_items()
 
     def _hide_controls(self):
-        for cid in [SEARCHBUTTON, NORESULTS]:
+        for cid in (SEARCHBUTTON, NORESULTS):
             self.getControl(cid).setVisible(False)
 
     def _parse_argv(self):
@@ -112,7 +112,7 @@ class GUI(xbmcgui.WindowXML):
         if cat['type'] == 'seasonepisodes':
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
-        elif cat['type'] in ['movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors']:
+        elif cat['type'] in ('movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors'):
             (required_rules, keywords) = self._parse_search(cat['filters'], search)
             keywords_rule = ''
             if keywords:
@@ -140,10 +140,10 @@ class GUI(xbmcgui.WindowXML):
             rule = cat['rule'].format(query = search)
         log("Type '{}' Rule: {}".format(cat['type'], rule))
         if self.hidewatched:
-            if cat['type'] in ['episodes', 'movies', 'tvshows']:
+            if cat['type'] in ('episodes', 'movies', 'tvshows'):
                 rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
                 log("HideWatched Rule: {}".format(rule))
-            elif cat['type'] in ['seasonepisodes']:
+            elif cat['type'] == 'seasonepisodes':
                 rule = rule + ', "filter": {"field": "playcount", "operator": "is", "value": "0"}'
                 log("HideWatched Rule: {}".format(rule))
 
@@ -196,7 +196,7 @@ class GUI(xbmcgui.WindowXML):
                         listitem.addStreamInfo('audio', stream)
                     for stream in item['streamdetails']['subtitle']:
                         listitem.addStreamInfo('subtitle', stream)
-                if cat['type'] != 'actors' and cat['type'] != 'directors' and cat['type'] != 'tvactors':
+                if cat['type'] not in ('actors', 'directors', 'tvactors'):
                     listitem.setProperty('content', cat['content'])
                 if cat['content'] == 'tvshows' and cat['type'] != 'tvactors':
                     listitem.setProperty('TotalSeasons', str(item['season']))
@@ -205,9 +205,9 @@ class GUI(xbmcgui.WindowXML):
                     listitem.setProperty('UnWatchedEpisodes', str(item['episode'] - item['watchedepisodes']))
                 elif cat['content'] == 'seasons':
                     listitem.setProperty('tvshowid', str(item['tvshowid']))
-                elif (cat['content'] == 'movies' and cat['type'] != 'actors' and cat['type'] != 'directors') or cat['content'] == 'episodes' or cat['content'] == 'musicvideos':
+                elif (cat['content'] == 'movies' and cat['type'] not in ('actors', 'directors')) or cat['content'] == 'episodes' or cat['content'] == 'musicvideos':
                     listitem.setProperty('resume', str(int(item['resume']['position'])))
-                elif cat['content'] == 'artists' or cat['content'] == 'albums':
+                elif cat['content'] in ('artists', 'albums'):
                     info, props = self._split_labels(item, cat['properties'], cat['content'][0:-1] + '_')
                     for key, value in props.items():
                         listitem.setProperty(key, value)
@@ -216,14 +216,14 @@ class GUI(xbmcgui.WindowXML):
                 if cat['content'] == 'songs':
                     listitem.setProperty('artistid', str(item['artistid'][0]))
                     listitem.setProperty('albumid', str(item['albumid']))
-                if (cat['content'] == 'movies' and cat['type'] != 'actors' and cat['type'] != 'directors') or (cat['content'] == 'tvshows' and cat['type'] != 'tvactors') or cat['content'] == 'episodes' or cat['content'] == 'musicvideos' or cat['content'] == 'songs':
+                if (cat['content'] == 'movies' and cat['type'] not in ('actors', 'directors')) or (cat['content'] == 'tvshows' and cat['type'] != 'tvactors') or cat['content'] == 'episodes' or cat['content'] == 'musicvideos' or cat['content'] == 'songs':
                     listitem.setPath(item['file'])
                 if cat['media']:
                     listitem.setInfo(cat['media'], self._get_info(item, cat['content'][0:-1]))
                     listitem.setProperty('media', cat['media'])
                 if cat['content'] == 'tvshows' and cat['type'] != 'tvactors':
                     listitem.setIsFolder(True)
-                if cat['type'] != 'actors' and cat['type'] != 'directors' and cat['type'] != 'tvactors':
+                if cat['type'] not in ('actors', 'directors', 'tvactors'):
                     listitems.append(listitem)
             if actors:
                 for name, val in sorted(actors.items()):

@@ -705,7 +705,7 @@
 								<width>48</width>
 								<height>48</height>
 								<texture>globalsearch-list-unwatched.png</texture>
-								<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+								<visible>![String.isEqual(ListItem.Label, "..") | Integer.IsGreater(ListItem.Playcount,0)]</visible>
 							</control>
 						</control>
 					</control>
@@ -898,7 +898,7 @@
 								<width>48</width>
 								<height>48</height>
 								<texture>globalsearch-list-unwatched.png</texture>
-								<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+								<visible>![String.isEqual(ListItem.Label, "..") | Integer.IsGreater(ListItem.Playcount,0)]</visible>
 							</control>
 						</control>
 					</control>
@@ -1141,7 +1141,7 @@
 								<width>48</width>
 								<height>48</height>
 								<texture>globalsearch-list-unwatched.png</texture>
-								<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+								<visible>![String.isEqual(ListItem.Label, "..") | Integer.IsGreater(ListItem.Playcount,0)]</visible>
 							</control>
 						</control>
 						<control type="group">
@@ -1211,7 +1211,7 @@
 						<height>90</height>
 						<texture background="true">$INFO[ListItem.Art(poster)]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)</visible>
+						<visible>!String.isEqual(ListItem.Label, "..") + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="image">
 						<left>5</left>
@@ -1220,7 +1220,7 @@
 						<height>90</height>
 						<texture background="true">$INFO[ListItem.Icon]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
+						<visible>String.isEqual(ListItem.Label, "..") | ![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="group">
 						<control type="image">
@@ -1237,7 +1237,7 @@
 							<width>48</width>
 							<height>48</height>
 							<texture>globalsearch-list-unwatched.png</texture>
-							<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+							<visible>![String.isEqual(ListItem.Label, "..") | Integer.IsGreater(ListItem.Playcount,0)]</visible>
 						</control>
 					</control>
 					<control type="label">
@@ -1345,7 +1345,7 @@
 						<height>90</height>
 						<texture background="true">$INFO[ListItem.Art(poster)]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)</visible>
+						<visible>!String.isEqual(ListItem.Label, "..") + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="image">
 						<left>5</left>
@@ -1354,7 +1354,7 @@
 						<height>90</height>
 						<texture>$INFO[ListItem.Icon]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
+						<visible>String.isEqual(ListItem.Label, "..") | ![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="group">
 						<control type="image">
@@ -1371,7 +1371,7 @@
 							<width>48</width>
 							<height>48</height>
 							<texture>globalsearch-list-unwatched.png</texture>
-							<visible>!Integer.IsGreater(ListItem.Playcount,0)</visible>
+							<visible>![String.isEqual(ListItem.Label, "..") | Integer.IsGreater(ListItem.Playcount,0)]</visible>
 						</control>
 					</control>
 					<control type="label">

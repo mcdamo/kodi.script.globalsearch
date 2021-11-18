@@ -1,3 +1,10 @@
+v9.2.0
+- add support for searching paths and filenames
+- add support for advanced searches
+- add setting for hiding unwatched videos
+- fix toggle unwatched in nested search
+- fix navigation back from nested search
+
 v9.1.1
 - fix toggle unwatch action
 
@@ -5,6 +12,8 @@ v9.1.0
 - add support for searching episodes and movies by plot
 - add watched icons in list view
 - add support for toggling listing of unwatched videos
+
+========== Forked to Global Search [MOD] ==========
 
 v9.0.6
 - cosmetics

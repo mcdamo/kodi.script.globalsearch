@@ -138,9 +138,15 @@ class GUI(xbmcgui.WindowXML):
             rule = cat['rule'].format(query = final_rule)
         else:
             rule = cat['rule'].format(query = search)
-        if (self.hidewatched and cat['type'] in ['episodes', 'movies', 'tvshows']):
-            rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
-            log("HideWatched filter: {}".format(rule))
+        log("Type '{}' Rule: {}".format(cat['type'], rule))
+        if self.hidewatched:
+            if cat['type'] in ['episodes', 'movies', 'tvshows']:
+                rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
+                log("HideWatched Rule: {}".format(rule))
+            elif cat['type'] in ['seasonepisodes']:
+                rule = rule + ', "filter": {"field": "playcount", "operator": "is", "value": "0"}'
+                log("HideWatched Rule: {}".format(rule))
+
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))
         self.getControl(SEARCHCATEGORY).setVisible(True)
         json_query = xbmc.executeJSONRPC('{"jsonrpc":"2.0", "method":"%s", "params":{"properties":%s, "sort":{"method":"%s"}, %s}, "id": 1}' % (cat['method'], json.dumps(cat['properties']), cat['sort'], rule))

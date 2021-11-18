@@ -1211,7 +1211,7 @@
 						<height>90</height>
 						<texture background="true">$INFO[ListItem.Art(poster)]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)</visible>
+						<visible>!String.isEqual(ListItem.Label, "..") + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="image">
 						<left>5</left>
@@ -1220,7 +1220,7 @@
 						<height>90</height>
 						<texture background="true">$INFO[ListItem.Icon]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
+						<visible>String.isEqual(ListItem.Label, "..") | ![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="group">
 						<control type="image">
@@ -1345,7 +1345,7 @@
 						<height>90</height>
 						<texture background="true">$INFO[ListItem.Art(poster)]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)</visible>
+						<visible>!String.isEqual(ListItem.Label, "..") + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="image">
 						<left>5</left>
@@ -1354,7 +1354,7 @@
 						<height>90</height>
 						<texture>$INFO[ListItem.Icon]</texture>
 						<aspectratio>keep</aspectratio>
-						<visible>![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
+						<visible>String.isEqual(ListItem.Label, "..") | ![Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 					</control>
 					<control type="group">
 						<control type="image">

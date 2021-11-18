@@ -139,7 +139,6 @@ class GUI(xbmcgui.WindowXML):
         else:
             rule = cat['rule'].format(query = search)
         if (self.hidewatched and cat['type'] in ['episodes', 'movies', 'tvshows']):
-            # FIXME: hidewatched tvshowseasons and seasonepisodes?
             rule = rule[:9] + '{"and": [{"field": "playcount", "operator": "is", "value": "0"}, ' + rule[9:] + ']}'
             log("HideWatched filter: {}".format(rule))
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(cat['label']))

@@ -106,6 +106,9 @@ class GUI(xbmcgui.WindowXML):
         self._check_focus()
 
     def _get_items(self, cat, search):
+        search_actors = []
+        search_directors = []
+        search_keywords = []
         if cat['content'] == 'livetv':
             self._fetch_channelgroups(cat)
             return
@@ -113,26 +116,28 @@ class GUI(xbmcgui.WindowXML):
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
         elif cat['type'] in ('movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors'):
-            (required_rules, keywords) = self._parse_search(cat['filters'], search)
+            (required_rules, search_keywords, search_actors, search_directors) = self._parse_search(cat['filters'], search)
+            if len(search_keywords) == 0 and len(required_rules) == 0:
+                return
             keywords_rule = ''
-            if keywords:
+            if search_keywords:
                 filters = []
-                filter = self._keyword_filters(cat['filters']['default'], keywords)
+                filter = self._keyword_filters(cat['filters']['default'], search_keywords)
                 filters.append(filter)
                 if ('path' in cat['filters'] and ADDON.getSettingBool('paths')):
-                    filter = self._keyword_filters(cat['filters']['path'], keywords)
+                    filter = self._keyword_filters(cat['filters']['path'], search_keywords)
                     filters.append(filter)
                 if ('filename' in cat['filters'] and ADDON.getSettingBool('filenames')):
-                    filter = self._keyword_filters(cat['filters']['filename'], keywords)
+                    filter = self._keyword_filters(cat['filters']['filename'], search_keywords)
                     filters.append(filter)
-                if ('plot' in cat['filters'] and (((cat['type'] == 'tvshows' or cat['type'] == 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
-                    filter = self._keyword_filters(cat['filters']['plot'], keywords)
+                if ('plot' in cat['filters'] and ((cat['type'] in ('tvshows', 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
+                    filter = self._keyword_filters(cat['filters']['plot'], search_keywords)
                     filters.append(filter)
                 keywords_rule = filters[0] if len(filters) == 1 else '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
             if required_rules:
                 if keywords_rule:
                     required_rules.append(keywords_rule)
-                final_rule = '{{"and":[{filters}]}}'.format(filters = ','.join(required_rules))
+                final_rule = required_rules[0] if len(required_rules) == 1 else '{{"and":[{filters}]}}'.format(filters = ','.join(required_rules))
             else:
                 final_rule = keywords_rule
             rule = cat['rule'].format(query = final_rule)
@@ -160,9 +165,10 @@ class GUI(xbmcgui.WindowXML):
             listitems.append(listitem)
         if 'result' in json_response and(json_response['result'] != None) and cat['content'] in json_response['result']:
             for item in json_response['result'][cat['content']]:
-                if cat['type'] == 'actors' or cat['type'] == 'tvactors':
+                if cat['type'] in ('actors', 'tvactors'):
                     for item in item['cast']:
-                        if search.lower() in item['name'].lower():
+                        name = item['name'].lower()
+                        if any(s in name for s in search_actors) or any(s in name for s in search_keywords):
                             name = item['name']
                             if 'thumbnail' in item:
                                 thumb = item['thumbnail']
@@ -177,7 +183,8 @@ class GUI(xbmcgui.WindowXML):
                             actors[name] = val
                 elif cat['type'] == 'directors':
                     for item in item['director']:
-                        if search.lower() in item.lower():
+                        name = item.lower()
+                        if any(s in name for s in search_directors) or any(s in name for s in search_keywords):
                             name = item
                             val = {}
                             val['thumb'] = cat['icon']
@@ -249,9 +256,9 @@ class GUI(xbmcgui.WindowXML):
                 menuitem = xbmcgui.ListItem(LANGUAGE(cat['label']), str(listlen), offscreen=True)
             menuitem.setArt({'icon':cat['menuthumb']})
             menuitem.setProperty('type', cat['type'])
-            if cat['type'] != 'actors' and cat['type'] != 'directors' and cat['type'] != 'tvactors':
+            if cat['type'] not in ('actors', 'directors', 'tvactors'):
                 menuitem.setProperty('content', cat['content'])
-            elif cat['type'] == 'actors' or cat['type'] == 'tvactors':
+            elif cat['type'] in ('actors', 'tvactors'):
                 menuitem.setProperty('content', 'actors')
             elif cat['type'] == 'directors':
                 menuitem.setProperty('content', 'directors')
@@ -261,9 +268,9 @@ class GUI(xbmcgui.WindowXML):
             self.content[cat['type']] = listitems
             if self.navback and self.focusset == 'false':
                 if self.history[self.level]['menutype'] == cat['type']:
-                    if cat['type'] != 'actors' and cat['type'] != 'directors' and cat['type'] != 'tvactors':
+                    if cat['type'] not in ('actors', 'directors', 'tvactors'):
                         self.setContent(cat['content'])
-                    elif cat['type'] == 'actors' or cat['type'] == 'tvactors':
+                    elif cat['type'] in ('actors', 'tvactors'):
                         self.setContent('actors')
                     elif cat['type'] == 'directors':
                         self.setContent('directors')
@@ -272,9 +279,9 @@ class GUI(xbmcgui.WindowXML):
                     self.menutype = cat['type']
                     self.focusset = 'true'
             elif self.focusset == 'false':
-                if cat['type'] != 'actors' and cat['type'] != 'directors' and cat['type'] != 'tvactors':
+                if cat['type'] not in ('actors', 'directors', 'tvactors'):
                     self.setContent(cat['content'])
-                elif cat['type'] == 'actors' or cat['type'] == 'tvactors':
+                elif cat['type'] in ('actors', 'tvactors'):
                     self.setContent('actors')
                 elif cat['type'] == 'directors':
                     self.setContent('directors')
@@ -297,9 +304,11 @@ class GUI(xbmcgui.WindowXML):
 
         Named parameters are mandatory in the search results and all keywords must match.
         """
-        matches = re.findall(r'(((path|filename|title|plot):)?([^\s"]+|"([^"]+)"))', search)
+        matches = re.findall(r'(((path|filename|title|plot|director|actor):)?([^\s"]+|"([^"]+)"))', search)
         keywords = []
         required = []
+        actors = []
+        directors = []
         for match in matches:
             # match[4] is phrase inside quotes, match[3] is any keyword
             # eg. 'Doctor Who' or '"Doctor Who"'
@@ -307,21 +316,22 @@ class GUI(xbmcgui.WindowXML):
             if match[2]:
                 # match is a named parameter
                 if match[2] in filters:
+                    if match[2] == 'actor':
+                        actors.append(keyword)
+                    elif match[2] == 'director':
+                        directors.append(keyword)
                     required.append(filters[match[2]].format(query = keyword))
                 else:
                     # recognised param is not valid for this media type, so ignore
                     pass
             else:
                 keywords.append(keyword)
-        return (required, keywords)
+        return (required, keywords, actors, directors)
 
     def _keyword_filters(self, filter, keywords):
         """Wrap filters in 'and' if there a multiple keywords"""
         filters = list(map(lambda x: filter.format(query = x), keywords))
-        if len(filters) == 1:
-            return filters[0]
-        rule = '{{"and":[{filters}]}}'.format(filters = ','.join(filters))
-        return rule
+        return filters[0] if len(filters) == 1 else '{{"and":[{filters}]}}'.format(filters = ','.join(filters))
 
     def _fetch_channelgroups(self, cat):
         self.getControl(SEARCHCATEGORY).setLabel(xbmc.getLocalizedString(19069))

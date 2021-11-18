@@ -7,6 +7,7 @@ CONTENTS:
 I.   Infolabels available in script-globalsearch.xml
 II.  Control id's used in script-globalsearch.xml
 III. Available window properties
+IV.  Advanced searches
 
 
 
@@ -236,4 +237,19 @@ II. Control id's used in script-globalsearch.xml
 III.  Available window properties
 --------------------------------
 Window.Property(GlobalSearch.SearchString) - the string the user is searching for
+
+
+
+IV. Advanced searches
+---------------------
+Search automatically splits words on spaces and uses phrases when wrapped in
+double quotes:
+
+eg. 'foo bar baz'   => [result contains 'foo' AND 'bar' AND 'baz']
+    'foo "bar baz"' => [result contains 'foo' AND 'bar baz']
+
+Named parameters can be added to search specific fields, supported fields are
+'path', 'filename', 'title', 'plot', 'director', 'actor':
+
+eg. 'title:foo bar' => [title contains 'foo' AND result contains 'bar']
 

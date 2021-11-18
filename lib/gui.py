@@ -710,13 +710,17 @@ class GUI(xbmcgui.WindowXML):
         self.hidewatched = not self.hidewatched
         log("Toggle hidewatched {}".format(self.hidewatched))
         self._set_hidewatched_label()
+
+        # refresh page and run search, similar to _nav_back()
         self._reset_variables()
-        self._init_items()
         self._hide_controls()
         self.clearList()
         self.menu.reset()
         self.oldfocus = 0
-        self._fetch_items()
+        cats = self.history[self.level]['cats']
+        search = self.history[self.level]['search']
+        for cat in cats:
+            self._get_items(cat, search)
 
     def onClick(self, controlId):
         if controlId == self.getCurrentContainerId():

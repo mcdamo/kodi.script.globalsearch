@@ -1,3 +1,8 @@
+v9.3.1
+- fix prefill last keyboard input when refining search
+- fix crash with empty search string
+- fix search is hidden after nav_back
+
 v9.3.0
 - reopen search input instead of 'Search again?' dialog
 - fix alignment of 'No results found' banner

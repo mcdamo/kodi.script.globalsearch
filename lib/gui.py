@@ -705,6 +705,7 @@ class GUI(xbmcgui.WindowXML):
         for cat in cats:
             self._get_items(cat, search)
         self.navback = False
+        self._check_focus()
 
     def _new_search(self):
         # prefill with last search text

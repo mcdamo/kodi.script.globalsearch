@@ -588,12 +588,8 @@ class GUI(xbmcgui.WindowXML):
         if self.focusset == 'false':
             self.getControl(NORESULTS).setVisible(True)
             self.setFocus(self.getControl(SEARCHBUTTON))
-            dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(xbmc.getLocalizedString(284), LANGUAGE(32298))
-            if ret:
-                self._new_search()
-            else:
-                self._close()
+            # re-open keyboard entry prefilled with last search text
+            self._new_search(self.searchstring)
 
     def _context_menu(self, controlId, listitem):
         labels = ()
@@ -711,8 +707,8 @@ class GUI(xbmcgui.WindowXML):
             self._get_items(cat, search)
         self.navback = False
 
-    def _new_search(self):
-        keyboard = xbmc.Keyboard('', LANGUAGE(32101), False)
+    def _new_search(self, prefill = ''):
+        keyboard = xbmc.Keyboard(prefill, LANGUAGE(32101), False)
         keyboard.doModal()
         if(keyboard.isConfirmed()):
             self.searchstring = keyboard.getText()
@@ -720,6 +716,9 @@ class GUI(xbmcgui.WindowXML):
             self.oldfocus = 0
             self.clearList()
             self.onInit()
+        elif(self.focusset == 'false'):
+            # No results and keyboard input closed
+            self._close()
 
     def _set_hidewatched_label(self):
         labelid = 16101 if self.hidewatched else 16100 # "Unwatched" / "All videos"

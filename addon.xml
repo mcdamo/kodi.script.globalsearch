@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.globalsearch" name="Global Search [MOD]" version="9.2.0" provider-name="mcdamo">
+<addon id="script.globalsearch" name="Global Search [MOD]" version="9.3.0" provider-name="mcdamo">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
@@ -72,9 +72,8 @@
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.jpg</fanart>
 		</assets>
-		<news>- add support for searching episodes and movies by plot
-- add watched icons in list view
-- add support for toggling listing of unwatched videos
+		<news>- reopen search input instead of 'Search again?' dialog
+- fix alignment of 'No results found' banner
 </news>
 	</extension>
 </addon>

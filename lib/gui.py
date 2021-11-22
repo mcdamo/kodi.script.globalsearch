@@ -588,8 +588,7 @@ class GUI(xbmcgui.WindowXML):
         if self.focusset == 'false':
             self.getControl(NORESULTS).setVisible(True)
             self.setFocus(self.getControl(SEARCHBUTTON))
-            # re-open keyboard entry prefilled with last search text
-            self._new_search(self.searchstring)
+            self._new_search()
 
     def _context_menu(self, controlId, listitem):
         labels = ()
@@ -707,8 +706,9 @@ class GUI(xbmcgui.WindowXML):
             self._get_items(cat, search)
         self.navback = False
 
-    def _new_search(self, prefill = ''):
-        keyboard = xbmc.Keyboard(prefill, LANGUAGE(32101), False)
+    def _new_search(self):
+        # prefill with last search text
+        keyboard = xbmc.Keyboard(self.searchstring, LANGUAGE(32101), False)
         keyboard.doModal()
         if(keyboard.isConfirmed()):
             self.searchstring = keyboard.getText()

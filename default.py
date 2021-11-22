@@ -2,6 +2,7 @@ import sys
 from urllib.parse import unquote_plus
 import xbmc
 import xbmcaddon
+import xbmcgui
 
 LANGUAGE = xbmcaddon.Addon().getLocalizedString
 CWD = xbmcaddon.Addon().getAddonInfo('path')
@@ -12,14 +13,23 @@ if (__name__ == '__main__'):
     except:
         params = {}
     searchstring = unquote_plus(params.get('searchstring',''))
+    cancelled = False
     if searchstring:
         del params['searchstring']
     else:
-        keyboard = xbmc.Keyboard('', LANGUAGE(32101), False)
+        window_id = xbmcgui.getCurrentWindowId()
+        if (window_id >= 13000):
+            # Addon might be open, try getting the current searchstring
+            searchstring = xbmcgui.Window(window_id).getProperty('GlobalSearch.SearchString')
+        keyboard = xbmc.Keyboard(searchstring, LANGUAGE(32101), False)
         keyboard.doModal()
         if (keyboard.isConfirmed()):
             searchstring = keyboard.getText()
-    if searchstring:
+        else:
+            # keyboard dialog closed, cancel search
+            cancelled = True
+
+    if not cancelled and searchstring:
         from lib import gui
         ui = gui.GUI('script-globalsearch.xml', CWD, 'default', '1080i', True, searchstring=searchstring, params=params)
         ui.doModal()

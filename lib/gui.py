@@ -22,10 +22,10 @@ class GUI(xbmcgui.WindowXML):
         self.history = {}
         self.menuposition = 0
         self.searchstring = self._clean_string(self.searchstring).strip()
+        self.window_id = xbmcgui.getCurrentWindowId()
         if self.searchstring == '':
             self._close()
         else:
-            self.window_id = xbmcgui.getCurrentWindowId()
             xbmcgui.Window(self.window_id).setProperty('GlobalSearch.SearchString', self.searchstring)
             if not self.nextsearch:
                 if self.params == {}:

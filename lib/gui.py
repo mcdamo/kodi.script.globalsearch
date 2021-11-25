@@ -740,6 +740,7 @@ class GUI(xbmcgui.WindowXML):
         search = self.history[self.level]['search']
         for cat in cats:
             self._get_items(cat, search)
+        self._check_focus()
 
     def onClick(self, controlId):
         if controlId == self.getCurrentContainerId():

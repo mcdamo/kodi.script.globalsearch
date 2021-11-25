@@ -12,6 +12,7 @@ class GUI(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
         self.params = kwargs['params']
         self.searchstring = kwargs['searchstring']
+        self.hidewatched = kwargs['hidewatched']
 
     def onInit(self):
         self.clearList()
@@ -26,7 +27,6 @@ class GUI(xbmcgui.WindowXML):
         if self.searchstring == '':
             self._close()
         else:
-            xbmcgui.Window(self.window_id).setProperty('GlobalSearch.SearchString', self.searchstring)
             if not self.nextsearch:
                 if self.params == {}:
                     self._load_settings()
@@ -34,6 +34,7 @@ class GUI(xbmcgui.WindowXML):
                     self._parse_argv()
                 self._get_preferences()
                 self._load_favourites()
+            self._save_runtime_options()
             self._reset_variables()
             self._init_items()
             self.menu.reset()
@@ -52,7 +53,7 @@ class GUI(xbmcgui.WindowXML):
         for key, value in CATEGORIES.items():
             if key not in ('albumsongs', 'artistalbums', 'tvshowseasons', 'seasonepisodes', 'episodesplot', 'actormovies', 'directormovies', 'actortvshows'):
                 CATEGORIES[key]['enabled'] = ADDON.getSettingBool(key)
-        self.hidewatched = ADDON.getSettingBool('hidewatched')
+        self.hidewatched = ADDON.getSettingBool('hidewatched') if self.hidewatched == None else self.hidewatched
         self._set_hidewatched_label()
 
     def _get_preferences(self):
@@ -728,8 +729,8 @@ class GUI(xbmcgui.WindowXML):
     def _toggle_hidewatched(self):
         self.hidewatched = not self.hidewatched
         log("Toggle hidewatched {}".format(self.hidewatched))
+        self._save_runtime_options()
         self._set_hidewatched_label()
-
         # refresh page and run search, similar to _nav_back()
         self._reset_variables()
         self._hide_controls()
@@ -826,9 +827,17 @@ class GUI(xbmcgui.WindowXML):
             else:
                 self.oldfocus = item
 
+    def _save_runtime_options(self):
+        win = xbmcgui.Window(self.window_id)
+        win.setProperty('GlobalSearch.SearchString', self.searchstring)
+        win.setProperty('GlobalSearch.HideWatched', str(self.hidewatched))
+
+    def _clear_runtime_options(self):
+        xbmcgui.Window(self.window_id).clearProperties()
+
     def _close(self):
         ADDON.setSettingInt('view', self.getCurrentContainerId())
-        xbmcgui.Window(self.window_id).clearProperty('GlobalSearch.SearchString')
+        self._clear_runtime_options()
         self.close()
         log('script stopped')
 

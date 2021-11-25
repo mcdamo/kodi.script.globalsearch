@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.globalsearch" name="Global Search [MOD]" version="9.3.1" provider-name="mcdamo">
+<addon id="script.globalsearch" name="Global Search [MOD]" version="9.3.2" provider-name="mcdamo">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
@@ -72,9 +72,9 @@
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.jpg</fanart>
 		</assets>
-		<news>- prefill last keyboard input when refining search
-- fix crash with empty search string
-- fix search button hidden after nav_back
-</news>
+		<news>
+- fix search button hidden after toggling unwatched
+- fix unwatched option reverts to default after watching video
+		</news>
 	</extension>
 </addon>

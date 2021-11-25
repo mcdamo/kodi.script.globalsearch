@@ -1,3 +1,7 @@
+v9.3.2
+- fix search button hidden after toggling unwatched
+- fix unwatched option reverts to default after watching video
+
 v9.3.1
 - fix prefill last keyboard input when refining search
 - fix crash with empty search string

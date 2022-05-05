@@ -96,7 +96,11 @@ msgctxt "#32018"
 msgid "Include Filenames in Search"
 msgstr ""
 
-# empty strings from id 32019 to 32100
+msgctxt "#32019"
+msgid "Default Search string"
+msgstr ""
+
+# empty strings from id 32020 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"

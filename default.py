@@ -13,11 +13,13 @@ if (__name__ == '__main__'):
     except:
         params = {}
     searchstring = unquote_plus(params.get('searchstring',''))
+    defaultsearchstring = xbmcaddon.Addon().getSettingString('defaultsearchstring')
     hidewatched = None
     cancelled = False
     if searchstring:
         del params['searchstring']
     else:
+        searchstring = defaultsearchstring
         window_id = xbmcgui.getCurrentWindowId()
         if (window_id >= 13000):
             # Addon might be open, try getting the current runtime options

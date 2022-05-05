@@ -80,6 +80,8 @@
 					<visible>false</visible>
 					<control type="edit" format="integer" />
 				</setting>
+			</group>
+			<group id="2">
 				<setting help="" id="hidewatched" label="32016" type="boolean">
 					<level>0</level>
 					<default>false</default>
@@ -94,6 +96,16 @@
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
+				</setting>
+				<setting type="string" id="defaultsearchstring" label="32019">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32019</heading>
+					</control>
 				</setting>
 			</group>
 		</category>

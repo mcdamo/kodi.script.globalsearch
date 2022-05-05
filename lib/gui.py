@@ -3,6 +3,7 @@ import json
 import operator
 import re
 from .defs import *
+from .storage import HistoryData
 
 def log(txt):
     message = '%s: %s' % (ADDONID, txt)
@@ -24,6 +25,7 @@ class GUI(xbmcgui.WindowXML):
         self.menuposition = 0
         self.searchstring = self._clean_string(self.searchstring).strip()
         self.window_id = xbmcgui.getCurrentWindowId()
+        self.searchHistory = []
         if self.searchstring == '':
             self._close()
         else:
@@ -40,9 +42,15 @@ class GUI(xbmcgui.WindowXML):
             self.menu.reset()
             self._set_view()
             self._fetch_items()
+            self._update_search_history() # this only runs if there are search results above
+
+    def _update_search_history(self):
+            self.searchHistory = HistoryData().append(self.searchstring, limit=ADDON.getSettingInt('searchhistorylength'))
+            if (len(self.searchHistory) > 1):
+                self.getControl(HISTORYBUTTON).setVisible(True)
 
     def _hide_controls(self):
-        for cid in (SEARCHBUTTON, NORESULTS):
+        for cid in (SEARCHBUTTON, NORESULTS, HISTORYBUTTON):
             self.getControl(cid).setVisible(False)
 
     def _parse_argv(self):
@@ -722,6 +730,18 @@ class GUI(xbmcgui.WindowXML):
             # No results and keyboard input closed
             self._close()
 
+    def _dialog_search_history(self):
+        # exclude current search term from the list
+        options = list(reversed(self.searchHistory))[1:]
+        ret = xbmcgui.Dialog().select(LANGUAGE(32280), options)
+        if (ret != -1):
+            # run search
+            self.searchstring = options[ret]
+            self.menu.reset()
+            self.oldfocus = 0
+            self.clearList()
+            self.onInit()
+
     def _set_hidewatched_label(self):
         labelid = 16101 if self.hidewatched else 16100 # "Unwatched" / "All videos"
         self.getControl(TOGGLE_HIDEWATCHED).setLabel(xbmc.getLocalizedString(labelid))
@@ -798,6 +818,8 @@ class GUI(xbmcgui.WindowXML):
             self._new_search()
         elif controlId == TOGGLE_HIDEWATCHED:
             self._toggle_hidewatched()
+        elif controlId == HISTORYBUTTON:
+            self._dialog_search_history()
 
     def onAction(self, action):
         if action.getId() in ACTION_CANCEL_DIALOG:

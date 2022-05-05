@@ -83,28 +83,40 @@
 			</group>
 			<group id="2">
 				<setting help="" id="hidewatched" label="32016" type="boolean">
-					<level>0</level>
+					<level>1</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting help="" id="paths" label="32017" type="boolean">
-					<level>0</level>
+					<level>1</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting help="" id="filenames" label="32018" type="boolean">
-					<level>0</level>
+					<level>1</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting type="string" id="defaultsearchstring" label="32019">
-					<level>0</level>
+					<level>1</level>
 					<default/>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
 					<control type="edit" format="string">
 						<heading>32019</heading>
+					</control>
+				</setting>
+				<setting help="" id="defaultsearchlast" label="32022" type="boolean">
+					<level>1</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting type="integer" id="searchhistorylength" label="32020" help="32021">
+					<level>1</level>
+					<default>20</default>
+					<control type="edit" format="integer">
+						<heading>32020</heading>
 					</control>
 				</setting>
 			</group>

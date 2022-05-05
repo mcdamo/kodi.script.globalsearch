@@ -100,7 +100,19 @@ msgctxt "#32019"
 msgid "Default Search string"
 msgstr ""
 
-# empty strings from id 32020 to 32100
+msgctxt "#32020"
+msgid "Search History Length"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Use 0 for no history, or -1 for infinite history"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Default to Last Search string (if available)"
+msgstr ""
+
+# empty strings from id 32022 to 32100
 
 msgctxt "#32101"
 msgid "Enter search string"
@@ -160,7 +172,13 @@ msgctxt "#32222"
 msgid "TV Show Actors"
 msgstr ""
 
-# empty strings from id 32223 to 32296
+# empty strings from id 32223 to 32279
+
+msgctxt "#32280"
+msgid "Search History"
+msgstr ""
+
+# empty strings from id 32281 to 32296
 
 msgctxt "#32297"
 msgid "Searching:"

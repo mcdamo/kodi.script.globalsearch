@@ -1,3 +1,8 @@
+v9.4.0
+- add persistent search history
+- add setting for default search string
+- add duration to video metadata bar
+
 v9.3.2
 - fix search button hidden after toggling unwatched
 - fix unwatched option reverts to default after watching video

@@ -46,6 +46,9 @@ class GUI(xbmcgui.WindowXML):
 
     def _update_search_history(self):
             self.searchHistory = HistoryData().append(self.searchstring, limit=ADDON.getSettingInt('searchhistorylength'))
+            self._show_history_button()
+
+    def _show_history_button(self):
             if (len(self.searchHistory) > 1):
                 self.getControl(HISTORYBUTTON).setVisible(True)
 
@@ -594,6 +597,7 @@ class GUI(xbmcgui.WindowXML):
     def _check_focus(self):
         self.getControl(SEARCHCATEGORY).setVisible(False)
         self.getControl(SEARCHBUTTON).setVisible(True)
+        self._show_history_button()
         if self.focusset == 'false':
             self.getControl(NORESULTS).setVisible(True)
             self.setFocus(self.getControl(SEARCHBUTTON))

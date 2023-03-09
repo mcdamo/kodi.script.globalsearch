@@ -1,3 +1,6 @@
+v9.4.1
+- fix history button disappearing
+
 v9.4.0
 - add persistent search history
 - add setting for default search string

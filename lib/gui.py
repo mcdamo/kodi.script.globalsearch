@@ -128,7 +128,7 @@ class GUI(xbmcgui.WindowXML):
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
         elif cat['type'] in ('movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors'):
-            (required_rules, search_keywords, search_actors, search_directors) = self._parse_search(cat['filters'], search)
+            (required_rules, search_keywords, search_actors, search_directors, search_notKeywords) = self._parse_search(cat['filters'], search)
             if len(search_keywords) == 0 and len(required_rules) == 0:
                 return
             keywords_rule = ''
@@ -146,6 +146,24 @@ class GUI(xbmcgui.WindowXML):
                     filter = self._keyword_filters(cat['filters']['plot'], search_keywords)
                     filters.append(filter)
                 keywords_rule = filters[0] if len(filters) == 1 else '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
+            if search_notKeywords:
+                filters = []
+                filter = self._keyword_filters(cat['filters']['default'], search_notKeywords)
+                filters.append(filter)
+                if ('path' in cat['filters'] and ADDON.getSettingBool('paths')):
+                    filter = self._keyword_filters(cat['filters']['path'], search_notKeywords)
+                    filters.append(filter)
+                if ('filename' in cat['filters'] and ADDON.getSettingBool('filenames')):
+                    filter = self._keyword_filters(cat['filters']['filename'], search_notKeywords)
+                    filters.append(filter)
+                if ('plot' in cat['filters'] and ((cat['type'] in ('tvshows', 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
+                    filter = self._keyword_filters(cat['filters']['plot'], search_notKeywords)
+                    filters.append(filter)
+                notKeywords_rule = filters[0] if len(filters) == 1 else '{{"and":[{filters}]}}'.format(filters = ','.join(filters))
+                if keywords_rule:
+                    keywords_rule = '{{"and":[{filters}]}}'.format(filters = ','.join([keywords_rule, notKeywords_rule]))
+                else:
+                    keywords_rule = notKeywords_rule
             if required_rules:
                 if keywords_rule:
                     required_rules.append(keywords_rule)
@@ -316,33 +334,42 @@ class GUI(xbmcgui.WindowXML):
 
         Named parameters are mandatory in the search results and all keywords must match.
         """
-        matches = re.findall(r'(((path|filename|title|plot|director|actor):)?([^\s"]+|"([^"]+)"))', search)
+        matches = re.findall(r'((-)?((path|filename|title|plot|director|actor):)?([^\s"]+|"([^"]+)"))', search)
         keywords = []
+        notKeywords = []
         required = []
         actors = []
         directors = []
         for match in matches:
-            # match[4] is phrase inside quotes, match[3] is any keyword
+            operator = 'contains'
+            andor = "or"
+            if match[1] == '-':
+                operator = 'doesnotcontain'
+                andor = "and"
+            # match[5] is phrase inside quotes, match[4] is any keyword
             # eg. 'Doctor Who' or '"Doctor Who"'
-            keyword = match[4] or match[3]
-            if match[2]:
+            keyword = match[5] or match[4]
+            if match[3]:
                 # match is a named parameter
-                if match[2] in filters:
-                    if match[2] == 'actor':
-                        actors.append(keyword)
-                    elif match[2] == 'director':
-                        directors.append(keyword)
-                    required.append(filters[match[2]].format(query = keyword))
+                if match[3] in filters:
+                    if match[3] == 'actor':
+                        actors.append((andor, operator, keyword))
+                    elif match[3] == 'director':
+                        directors.append((andor, operator, keyword))
+                    required.append(filters[match[3]].format(andor = andor, operator = operator, query = keyword))
                 else:
                     # recognised param is not valid for this media type, so ignore
                     pass
             else:
-                keywords.append(keyword)
-        return (required, keywords, actors, directors)
+                if match[1] == '-':
+                    notKeywords.append((andor, operator, keyword))
+                else:
+                    keywords.append((andor, operator, keyword))
+        return (required, keywords, actors, directors, notKeywords)
 
     def _keyword_filters(self, filter, keywords):
         """Wrap filters in 'and' if there a multiple keywords"""
-        filters = list(map(lambda x: filter.format(query = x), keywords))
+        filters = list(map(lambda x: filter.format(andor = x[0], operator = x[1], query = x[2]), keywords))
         return filters[0] if len(filters) == 1 else '{{"and":[{filters}]}}'.format(filters = ','.join(filters))
 
     def _fetch_channelgroups(self, cat):

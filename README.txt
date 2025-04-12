@@ -253,3 +253,6 @@ Named parameters can be added to search specific fields, supported fields are
 
 eg. 'title:foo bar' => [title contains 'foo' AND result contains 'bar']
 
+Dash is not operator:
+
+eg. 'foo -plot:bar' => [result contains 'foo' AND NOT plot contains 'bar']

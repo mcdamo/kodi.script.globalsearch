@@ -227,6 +227,7 @@ ListItem.DBType
 
 II. Control id's used in script-globalsearch.xml
 ------------------------------------------------------
+980  - 'History' button, visible when there are previous searches
 990  - 'New search' button, visible when the script finished searching
 991  - Search category label, visible when the script is searching
 999  - 'No results found' label, visible when no results are found

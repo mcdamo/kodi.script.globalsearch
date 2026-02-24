@@ -5,9 +5,9 @@ import re
 from .defs import *
 from .storage import HistoryData
 
-def log(txt):
+def log(txt, level=xbmc.LOGDEBUG):
     message = '%s: %s' % (ADDONID, txt)
-    xbmc.log(msg=message, level=xbmc.LOGDEBUG)
+    xbmc.log(msg=message, level=level)
 
 class GUI(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
@@ -54,7 +54,10 @@ class GUI(xbmcgui.WindowXML):
 
     def _hide_controls(self):
         for cid in (SEARCHBUTTON, NORESULTS, HISTORYBUTTON):
-            self.getControl(cid).setVisible(False)
+            try:
+                self.getControl(cid).setVisible(False)
+            except Exception as err:
+                log("Control not found: {}".format(err), xbmc.LOGERROR)
 
     def _parse_argv(self):
         for key, value in self.params.items():
@@ -781,7 +784,10 @@ class GUI(xbmcgui.WindowXML):
 
     def _set_hidewatched_label(self):
         labelid = 16101 if self.hidewatched else 16100 # "Unwatched" / "All videos"
-        self.getControl(TOGGLE_HIDEWATCHED).setLabel(xbmc.getLocalizedString(labelid))
+        try:
+            self.getControl(TOGGLE_HIDEWATCHED).setLabel(xbmc.getLocalizedString(labelid))
+        except Exception as err:
+            log("Control not found: {}".format(err), xbmc.LOGERROR)
 
     def _toggle_hidewatched(self):
         self.hidewatched = not self.hidewatched

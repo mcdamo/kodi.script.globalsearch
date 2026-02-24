@@ -2,6 +2,7 @@ import datetime
 import json
 import operator
 import re
+from collections import OrderedDict
 from .defs import *
 from .storage import HistoryData
 
@@ -25,7 +26,7 @@ class GUI(xbmcgui.WindowXML):
         self.menuposition = 0
         self.searchstring = self._clean_string(self.searchstring).strip()
         self.window_id = xbmcgui.getCurrentWindowId()
-        self.searchHistory = []
+        self.searchHistory = HistoryData().load()
         if self.searchstring == '':
             self._close()
         else:
@@ -42,15 +43,26 @@ class GUI(xbmcgui.WindowXML):
             self.menu.reset()
             self._set_view()
             self._fetch_items()
-            self._update_search_history() # this only runs if there are search results above
+            _value = self._update_search_history() # this only runs if there are search results above
+            if 'listposition' in _value:
+                self.setCurrentListPosition(_value['listposition'])
+            else:
+                self.setCurrentListPosition(900)
 
-    def _update_search_history(self):
-            self.searchHistory = HistoryData().append(self.searchstring, limit=ADDON.getSettingInt('searchhistorylength'))
-            self._show_history_button()
+
+    def _update_search_history(self, value=None):
+        _value = value if value else {}
+        _value ['hidewatched'] = self.hidewatched
+        if self.searchstring in self.searchHistory:
+            _value = self.searchHistory[self.searchstring] | _value # merge dicts
+
+        self.searchHistory = HistoryData().append(self.searchstring, _value, limit=ADDON.getSettingInt('searchhistorylength'))
+        self._show_history_button()
+        return _value
 
     def _show_history_button(self):
-            if (len(self.searchHistory) > 1):
-                self.getControl(HISTORYBUTTON).setVisible(True)
+        if (len(self.searchHistory) > 1):
+            self.getControl(HISTORYBUTTON).setVisible(True)
 
     def _hide_controls(self):
         for cid in (SEARCHBUTTON, NORESULTS, HISTORYBUTTON):
@@ -577,6 +589,7 @@ class GUI(xbmcgui.WindowXML):
         self._check_focus()
 
     def _play_item(self, key, value, listitem=None):
+        self._update_search_history({'listposition': self.containerposition}) # save current position
         if key == 'file':
             xbmc.executeJSONRPC('{"jsonrpc":"2.0", "method":"Player.Open", "params":{"item":{"%s":"%s"}}, "id":1}' % (key, value))
         elif key == 'albumid' or key == 'songid':
@@ -809,7 +822,7 @@ class GUI(xbmcgui.WindowXML):
     def onClick(self, controlId):
         if controlId == self.getCurrentContainerId():
             self.containerposition = self.getCurrentListPosition()
-            listitem = self.getListItem(self.getCurrentListPosition())
+            listitem = self.getListItem(self.containerposition)
             media = ''
             if listitem.getLabel() == '..':
                 self.level -= 1

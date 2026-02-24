@@ -40,15 +40,17 @@ class HistoryData(AddonData):
             history = OrderedDict()
         return history
 
-    def append(self, searchstring, limit=-1):
+    def append(self, key, value=None, limit=-1):
         history = self.load()
-        if searchstring in history:
+        if key in history:
             # delete to re-add below
-            del history[searchstring]
+            del history[key]
         while (limit >= 0 and len(history) > limit):
             history.popitem(last=False)
         # new items are appended at the 'end'
         # timestamp is not presently used, but could be sorted on in future.
-        history[searchstring] = datetime.datetime.now().timestamp()
+        _value = value if value else {}
+        _value['timestamp'] = datetime.datetime.now().timestamp()
+        history[key] = _value
         self.save(history)
         return history

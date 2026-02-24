@@ -1,3 +1,8 @@
+v9.6.0
+- show resume icon in media listings
+- return to last selected item after playing or when loading query from history
+- fix possible crashes
+
 v9.5.0
 - add dash '-' as NOT operator to search string
 

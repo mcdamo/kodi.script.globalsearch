@@ -120,7 +120,8 @@ class GUI(xbmcgui.WindowXML):
     def _get_items(self, cat, search):
         search_actors = []
         search_directors = []
-        search_keywords = []
+        search_query_components = []
+        search_keyword_strings = []
         if cat['content'] == 'livetv':
             self._fetch_channelgroups(cat)
             return
@@ -128,37 +129,37 @@ class GUI(xbmcgui.WindowXML):
             search = search[0], search[1]
             rule = cat['rule'].format(query0 = search[0], query1 = search[1])
         elif cat['type'] in ('movies', 'tvshows', 'episodes', 'musicvideos', 'artists', 'albums', 'songs', 'actors', 'directors', 'tvactors'):
-            (required_rules, search_keywords, search_actors, search_directors, search_notKeywords) = self._parse_search(cat['filters'], search)
-            if len(search_keywords) == 0 and len(required_rules) == 0:
+            (required_rules, search_query_components, search_actors, search_directors, search_not_query_components, search_keyword_strings) = self._parse_search(cat['filters'], search)
+            if len(search_query_components) == 0 and len(required_rules) == 0:
                 return
             keywords_rule = ''
-            if search_keywords:
+            if search_query_components:
                 filters = []
-                filter = self._keyword_filters(cat['filters']['default'], search_keywords)
-                filters.append(filter)
+                _filter = self._keyword_filters(cat['filters']['default'], search_query_components)
+                filters.append(_filter)
                 if ('path' in cat['filters'] and ADDON.getSettingBool('paths')):
-                    filter = self._keyword_filters(cat['filters']['path'], search_keywords)
-                    filters.append(filter)
+                    _filter = self._keyword_filters(cat['filters']['path'], search_query_components)
+                    filters.append(_filter)
                 if ('filename' in cat['filters'] and ADDON.getSettingBool('filenames')):
-                    filter = self._keyword_filters(cat['filters']['filename'], search_keywords)
-                    filters.append(filter)
+                    _filter = self._keyword_filters(cat['filters']['filename'], search_query_components)
+                    filters.append(_filter)
                 if ('plot' in cat['filters'] and ((cat['type'] in ('tvshows', 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
-                    filter = self._keyword_filters(cat['filters']['plot'], search_keywords)
-                    filters.append(filter)
+                    _filter = self._keyword_filters(cat['filters']['plot'], search_query_components)
+                    filters.append(_filter)
                 keywords_rule = filters[0] if len(filters) == 1 else '{{"or":[{filters}]}}'.format(filters = ','.join(filters))
-            if search_notKeywords:
+            if search_not_query_components:
                 filters = []
-                filter = self._keyword_filters(cat['filters']['default'], search_notKeywords)
-                filters.append(filter)
+                _filter = self._keyword_filters(cat['filters']['default'], search_not_query_components)
+                filters.append(_filter)
                 if ('path' in cat['filters'] and ADDON.getSettingBool('paths')):
-                    filter = self._keyword_filters(cat['filters']['path'], search_notKeywords)
-                    filters.append(filter)
+                    _filter = self._keyword_filters(cat['filters']['path'], search_not_query_components)
+                    filters.append(_filter)
                 if ('filename' in cat['filters'] and ADDON.getSettingBool('filenames')):
-                    filter = self._keyword_filters(cat['filters']['filename'], search_notKeywords)
-                    filters.append(filter)
+                    _filter = self._keyword_filters(cat['filters']['filename'], search_not_query_components)
+                    filters.append(_filter)
                 if ('plot' in cat['filters'] and ((cat['type'] in ('tvshows', 'episodes') and ADDON.getSettingBool('episodesplot')) or (cat['type'] == 'movies' and ADDON.getSettingBool('moviesplot')))):
-                    filter = self._keyword_filters(cat['filters']['plot'], search_notKeywords)
-                    filters.append(filter)
+                    _filter = self._keyword_filters(cat['filters']['plot'], search_not_query_components)
+                    filters.append(_filter)
                 notKeywords_rule = filters[0] if len(filters) == 1 else '{{"and":[{filters}]}}'.format(filters = ','.join(filters))
                 if keywords_rule:
                     keywords_rule = '{{"and":[{filters}]}}'.format(filters = ','.join([keywords_rule, notKeywords_rule]))
@@ -198,7 +199,8 @@ class GUI(xbmcgui.WindowXML):
                 if cat['type'] in ('actors', 'tvactors'):
                     for item in item['cast']:
                         name = item['name'].lower()
-                        if any(s in name for s in search_actors) or any(s in name for s in search_keywords):
+                        # Note: this does a simple match only on the keyword part of the query
+                        if any(s in name for s in search_actors) or any(s in name for s in search_keyword_strings):
                             name = item['name']
                             if 'thumbnail' in item:
                                 thumb = item['thumbnail']
@@ -214,7 +216,8 @@ class GUI(xbmcgui.WindowXML):
                 elif cat['type'] == 'directors':
                     for item in item['director']:
                         name = item.lower()
-                        if any(s in name for s in search_directors) or any(s in name for s in search_keywords):
+                        # Note: this does a simple match only on the keyword part of the query
+                        if any(s in name for s in search_directors) or any(s in name for s in search_keyword_strings):
                             name = item
                             val = {}
                             val['thumb'] = cat['icon']
@@ -335,37 +338,40 @@ class GUI(xbmcgui.WindowXML):
         Named parameters are mandatory in the search results and all keywords must match.
         """
         matches = re.findall(r'((-)?((path|filename|title|plot|director|actor):)?([^\s"]+|"([^"]+)"))', search)
-        keywords = []
-        notKeywords = []
+        query_components = []
+        not_query_components = []
         required = []
         actors = []
         directors = []
+        keyword_strings = [] # only the keyword component
         for match in matches:
-            operator = 'contains'
-            andor = "or"
+            _operator = 'contains'
+            _andor = "or"
             if match[1] == '-':
-                operator = 'doesnotcontain'
-                andor = "and"
+                _operator = 'doesnotcontain'
+                _andor = "and"
             # match[5] is phrase inside quotes, match[4] is any keyword
             # eg. 'Doctor Who' or '"Doctor Who"'
-            keyword = match[5] or match[4]
+            _keyword = match[5] or match[4]
             if match[3]:
                 # match is a named parameter
                 if match[3] in filters:
                     if match[3] == 'actor':
-                        actors.append((andor, operator, keyword))
+                        actors.append((_andor, _operator, _keyword))
                     elif match[3] == 'director':
-                        directors.append((andor, operator, keyword))
-                    required.append(filters[match[3]].format(andor = andor, operator = operator, query = keyword))
+                        directors.append((_andor, _operator, _keyword))
+                    required.append(filters[match[3]].format(andor = _andor, operator = _operator, query = _keyword))
+                    keyword_strings.append(_keyword)
                 else:
                     # recognised param is not valid for this media type, so ignore
                     pass
             else:
                 if match[1] == '-':
-                    notKeywords.append((andor, operator, keyword))
+                    not_query_components.append((_andor, _operator, _keyword))
                 else:
-                    keywords.append((andor, operator, keyword))
-        return (required, keywords, actors, directors, notKeywords)
+                    query_components.append((_andor, _operator, _keyword))
+                    keyword_strings.append(_keyword)
+        return (required, query_components, actors, directors, not_query_components, keyword_strings)
 
     def _keyword_filters(self, filter, keywords):
         """Wrap filters in 'and' if there a multiple keywords"""
@@ -515,7 +521,7 @@ class GUI(xbmcgui.WindowXML):
                 art['thumb'] = labels['banner']
             # needed for seasons and episodes
             elif art.get('tvshow.fanart'):
-               art['fanart'] = art['tvshow.fanart']
+                art['fanart'] = art['tvshow.fanart']
         else:
             art = labels['art']
             # needed for albums and songs

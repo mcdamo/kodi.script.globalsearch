@@ -53,7 +53,7 @@ class GUI(xbmcgui.WindowXML):
     def _update_search_history(self, value=None):
         _value = value if value else {}
         _value ['hidewatched'] = self.hidewatched
-        if self.searchstring in self.searchHistory:
+        if self.searchstring in self.searchHistory and isinstance(self.searchHistory[self.searchstring], dict):
             _value = self.searchHistory[self.searchstring] | _value # merge dicts
 
         self.searchHistory = HistoryData().append(self.searchstring, _value, limit=ADDON.getSettingInt('searchhistorylength'))
